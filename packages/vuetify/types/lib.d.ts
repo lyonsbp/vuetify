@@ -93,7 +93,6 @@ declare module 'vuetify/lib' {
   const VRangeSlider: Component
   const VRating: Component
   const VResponsive: Component
-  const VRowExpandTransition: Component
   const VScaleTransition: Component
   const VScrollXReverseTransition: Component
   const VScrollXTransition: Component
@@ -226,7 +225,6 @@ declare module 'vuetify/lib' {
     VRangeSlider,
     VRating,
     VResponsive,
-    VRowExpandTransition,
     VScaleTransition,
     VScrollXReverseTransition,
     VScrollXTransition,
