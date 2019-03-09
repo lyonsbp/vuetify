@@ -6,8 +6,6 @@ import VSimpleTable from './VSimpleTable'
 import mixins, { ExtractVue } from '../../util/mixins'
 
 interface options extends Vue {
-  previousChunk: VNodeChildren
-  nextChunk: VNodeChildren
   cachedItems: VNodeChildren
 }
 
@@ -23,10 +21,6 @@ export default mixins<options &
 
   props: {
     chunkSize: {
-      type: Number,
-      default: 75
-    },
-    bufferSize: {
       type: Number,
       default: 25
     },
@@ -55,17 +49,16 @@ export default mixins<options &
       return Math.floor(this.scrollTop / this.rowHeight)
     },
     chunkIndex (): number {
-      return Math.floor(this.topIndex / (this.chunkSize - (this.bufferSize * 2)))
+      return Math.floor(this.topIndex / this.chunkSize)
     },
     startIndex (): number {
-      return this.chunkIndex * (this.chunkSize - (this.bufferSize * 2))
+      return Math.max(0, (this.chunkIndex * this.chunkSize) - this.chunkSize)
     },
     offsetTop (): number {
       return Math.max(0, this.startIndex * this.rowHeight)
     },
     stopIndex (): number {
-      // return Math.min(this.startIndex + this.visibleRows, this.itemsLength)
-      return Math.min(this.startIndex + this.chunkSize, this.itemsLength)
+      return Math.min(this.startIndex + (this.chunkSize * 3), this.itemsLength)
     },
     offsetBottom (): number {
       return Math.max(0, ((this.itemsLength - this.chunkSize) * this.rowHeight) - this.offsetTop)
@@ -73,7 +66,6 @@ export default mixins<options &
   },
 
   watch: {
-    // scrollTop: 'setScrollTop'
     chunkIndex (newValue, oldValue) {
       this.oldChunk = oldValue
     }
@@ -81,8 +73,6 @@ export default mixins<options &
 
   created () {
     this.cachedItems = null
-    this.previousChunk = null
-    this.nextChunk = null
   },
 
   mounted () {
@@ -90,25 +80,11 @@ export default mixins<options &
 
     const table = this.$refs.table as Element
     table.addEventListener('scroll', this.scrollDebounce, { passive: true })
-
-    // const scroller = this.$refs.scroller as Element
-    // scroller.addEventListener('scroll', this.onScroll, { passive: true })
-
-    // this.setScrollTop()
-
-    // for (let i = this.startIndex; i < this.stopIndex; i++) {
-    //   this.cachedItems && this.cachedItems.push(this.$scopedSlots.item!({ index: i }) as any)
-    // }
-
-    // this.$forceUpdate()
   },
 
   beforeDestroy () {
     const table = this.$refs.table as Element
     table.removeEventListener('scroll', this.scrollDebounce)
-
-    // const scroller = this.$refs.scroller as Element
-    // scroller.removeEventListener('scroll', this.onScroll)
   },
 
   methods: {
@@ -124,57 +100,11 @@ export default mixins<options &
       const scroller = this.$refs.scroller as Element
       scroller.scrollTop = this.scrollTop
     },
-    genScroller () {
-      return this.$createElement('div', {
-        ref: 'scroller',
-        staticClass: 'v-virtual-table__scroller'
-      }, [
-        this.$createElement('div', {
-          style: this.createStyleHeight(this.totalHeight)
-        })
-      ])
-    },
     genBody () {
-      // const diff = Math.abs(this.oldStart - this.startIndex)
-      // if (diff > 100) {
-      //   this.cachedItems = []
-      //   for (let i = this.startIndex; i < this.stopIndex; i++) {
-      //     this.cachedItems.push(this.$scopedSlots.item!({ index: i }) as any)
-      //   }
-      // } else if (this.oldStart < this.startIndex) {
-      //   const diff = this.startIndex - this.oldStart
-
-      //   for (let i = diff; i > 0; i--) {
-      //     this.cachedItems.shift()
-      //     this.cachedItems.push(this.$scopedSlots.item!({ index: this.stopIndex - i }) as any)
-      //   }
-      // } else if (this.startIndex < this.oldStart) {
-      //   const diff = this.oldStart - this.startIndex
-
-      //   for (let i = diff - 1; i >= 0; i--) {
-      //     this.cachedItems.pop()
-      //     this.cachedItems.unshift(this.$scopedSlots.item!({ index: this.startIndex + i }) as any)
-      //   }
-      // }
-
-      // this.oldStart = this.startIndex
-      // console.log('genBody', this.chunkIndex, this.oldChunk, this.cachedItems)
-      if (this.chunkIndex - this.oldChunk === 1) {
-        this.previousChunk = this.cachedItems
-        this.cachedItems = this.nextChunk !== null ? this.nextChunk : this.genItems()
-        this.nextChunk = null
-        console.log('scrolling down', this.previousChunk, this.nextChunk)
-      } else if (this.oldChunk - this.chunkIndex === 1) {
-        console.log('scrolling up', this.nextChunk, this.previousChunk)
-        this.nextChunk = this.cachedItems
-        this.cachedItems = this.previousChunk !== null ? this.previousChunk : this.genItems()
-        this.previousChunk = null
-      } else if (this.cachedItems === null) {
+      if (this.cachedItems === null || this.chunkIndex !== this.oldChunk) {
         this.cachedItems = this.genItems()
+        this.oldChunk = this.chunkIndex
       }
-      // this.cachedItems = this.genItems()
-      // console.log(this.previousChunk, this.cachedItems, this.nextChunk)
-      // this.cachedItems = this.$scopedSlots.items!({ start: this.startIndex, stop: this.stopIndex })
 
       return this.$createElement('tbody', [
         this.$createElement('tr', { style: this.createStyleHeight(this.offsetTop) }),
@@ -183,12 +113,7 @@ export default mixins<options &
       ])
     },
     genItems () {
-      console.log('gen new items')
       return this.$scopedSlots.items!({ start: this.startIndex, stop: this.stopIndex })
-    },
-    onMousewheel (e: Event) {
-      const newScrollTop = Math.max(0, Math.min(this.totalHeight, this.scrollTop + (e as WheelEvent).deltaY))
-      this.scrollTop = newScrollTop
     },
     onScroll (e: Event) {
       const target = e.target as Element
@@ -213,8 +138,7 @@ export default mixins<options &
           height: convertToUnit(this.height)
         }
       }, [
-        this.genTable()// ,
-        // this.genScroller()
+        this.genTable()
       ])
     }
   },
