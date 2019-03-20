@@ -4,6 +4,7 @@ import './lib'
 import './alacarte'
 import './colors'
 import { VuetifyThemeOptions } from 'vuetify/types/services/theme'
+import { VuetifyStackOptions, VuetifyStackService } from 'vuetify/types/services/stack'
 
 declare const Vuetify: Vuetify
 export default Vuetify
@@ -28,6 +29,7 @@ export interface VuetifyUseOptions {
    */
   icons?: Partial<VuetifyIcons>
   lang?: Partial<VuetifyLanguage>
+  stack?: Partial<VuetifyStackOptions>
   rtl?: boolean
 }
 
@@ -39,6 +41,7 @@ export interface VuetifyObject extends Vue {
   theme: VuetifyThemeOptions
   icons: VuetifyIcons
   lang: VuetifyLanguage
+  stack: VuetifyStackService
   rtl: boolean
 }
 
