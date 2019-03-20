@@ -12,7 +12,7 @@ import Toggleable from '../../mixins/toggleable'
 import ClickOutside from '../../directives/click-outside'
 
 // Helpers
-import { getZIndex, convertToUnit, getSlotType } from '../../util/helpers'
+import { convertToUnit, getSlotType } from '../../util/helpers'
 import ThemeProvider from '../../util/ThemeProvider'
 import { consoleError } from '../../util/console'
 
@@ -97,7 +97,6 @@ export default {
     isActive (val) {
       if (val) {
         this.show()
-        this.hideScroll()
       } else {
         this.removeOverlay()
         this.unbind()
@@ -107,7 +106,6 @@ export default {
       if (!this.isActive) return
 
       if (val) {
-        this.hideScroll()
         this.removeOverlay(false)
       } else {
         this.showScroll()
@@ -165,14 +163,7 @@ export default {
 
       // close dialog if !persistent, clicked outside and we're the topmost dialog.
       // Since this should only be called in a capture event (bottom up), we shouldn't need to stop propagation
-      return getZIndex(this.$refs.content) >= this.getMaxZIndex()
-    },
-    hideScroll () {
-      if (this.fullscreen) {
-        document.documentElement.classList.add('overflow-y-hidden')
-      } else {
-        Overlayable.options.methods.hideScroll.call(this)
-      }
+      return true
     },
     show () {
       !this.fullscreen && !this.hideOverlay && this.genOverlay()

@@ -37,6 +37,7 @@ export default class Vuetify {
     this.use(services.Goto)
     this.use(services.Icons)
     this.use(services.Lang)
+    this.use(services.Stack)
     this.use(services.Theme)
   }
 
