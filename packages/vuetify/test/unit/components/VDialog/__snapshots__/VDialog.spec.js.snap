@@ -7,7 +7,6 @@ exports[`VDialog.js should render a disabled component and match snapshot 1`] = 
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="display: none;"
@@ -25,7 +24,6 @@ exports[`VDialog.js should render a fullscreen component and match snapshot 1`] 
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog v-dialog--fullscreen"
          style="display: none;"
@@ -43,7 +41,6 @@ exports[`VDialog.js should render a lazy component and match snapshot 1`] = `
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="display: none;"
@@ -61,7 +58,6 @@ exports[`VDialog.js should render a persistent component and match snapshot 1`] 
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog v-dialog--persistent"
          style="display: none;"
@@ -79,7 +75,6 @@ exports[`VDialog.js should render a scrollable component and match snapshot 1`] 
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog v-dialog--scrollable"
          style="display: none;"
@@ -97,7 +92,6 @@ exports[`VDialog.js should render component and match snapshot 1`] = `
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="display: none;"
@@ -115,7 +109,6 @@ exports[`VDialog.js should render component with custom origin and match snapsho
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="display: none;"
@@ -133,7 +126,6 @@ exports[`VDialog.js should render component with custom transition and match sna
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="display: none;"
@@ -151,7 +143,6 @@ exports[`VDialog.js should render component with custom width (max-width) and ma
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="max-width: 100px; display: none;"
@@ -169,7 +160,6 @@ exports[`VDialog.js should render component with custom width and match snapshot
 >
   <div tabindex="-1"
        class="v-dialog__content"
-       style="z-index: 0;"
   >
     <div class="v-dialog"
          style="width: 50%; display: none;"
