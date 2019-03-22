@@ -19,7 +19,7 @@ import {
   VuetifyServiceContract
 } from 'vuetify/types/services'
 import { VuetifyPreset } from 'vuetify/types/presets'
-import { VueConstructor } from 'vue'
+import Vue, { VueConstructor } from 'vue'
 
 export default class Vuetify {
   static install: (Vue: VueConstructor) => void
@@ -43,12 +43,12 @@ export default class Vuetify {
   // Called on the new vuetify instance
   // bootstrap in install beforeCreate
   // Exposes ssrContext if available
-  init (ssrContext?: object) {
+  init (root: Vue, ssrContext?: object) {
     this.installed.forEach(property => {
       const service = this.framework[property]
       service.framework = this.framework
 
-      service.init(ssrContext)
+      service.init(root, ssrContext)
     })
 
     // rtl is not installed and
